@@ -16,8 +16,6 @@ const CodeEditor = () => {
   useEffect(() => {
     if(store.autoDetectLanguage){
       const {language} = flourite(store.code, {noUnknown: true});
-      console.log(language);
-      
       useStore.setState({language: language.toLowerCase() || "plaintext"})
     }
   },[store.autoDetectLanguage, store.code])
@@ -43,7 +41,11 @@ const CodeEditor = () => {
             value={store.title}
             onChange={(e) => useStore.setState({ title: e.target.value })}
             spellCheck={false}
-            onClick={(e) => e.currentTarget.select()}
+            onClick={(e) => {
+              // e.persist();
+              const target = e.target as HTMLInputElement; 
+              target.select(); 
+            }}
             className="bg-transparent text-center text-gray-400 text-sm font-medium focus:outline-none"
           />
         </div>
@@ -67,7 +69,11 @@ const CodeEditor = () => {
             fontSize: store.fontSize,
           }}
           textareaClassName="focus:outline-none"
-          onClick={(e) => e.currentTarget.select()}
+          onClick={(e) => {
+            // e.persist();
+            const target = e.target as HTMLTextAreaElement; 
+            target.select();
+          }}
         />
       </div>
     </div>

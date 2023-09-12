@@ -1,19 +1,36 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import "./App.css";
 import CodeEditor from "@/components/CodeEditor";
 import { cn } from "./lib/utils";
 import { fonts, themes } from "./option";
 import useStore from "./store/Store";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import ExportOptions from "@/components/controls/ExportOptions";
+import ThemeSelect from "./components/controls/ThemeSelect";
+import LanguageSelect from "./components/controls/LanguageSelect";
+import FontSelect from "./components/controls/FontSelect";
 
 function App() {
-  const editorRef= useRef(null);
+  const editorRef = useRef(null);
   const theme = useStore((state) => state.theme);
   const padding = useStore((state) => state.padding);
   const fontStyle = useStore((state) => state.fontStyle);
   const showBackground = useStore((state) => state.showBackground);
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    if (queryParams.size === 0) return;
+    const state = Object.fromEntries(queryParams);
+
+    useStore.setState({
+      ...state,
+      code: state.code ? atob(state.code) : "",
+      autoDetectLanguage: state.autoDetectLanguage === "true",
+      darkMode: state.darkMode === "true",
+      fontSize: Number(state.fontSize || 18),
+      padding: Number(state.padding || 64),
+    });
+  });
   return (
     <>
       <main
@@ -41,8 +58,13 @@ function App() {
         >
           <CodeEditor />
         </div>
-        <Card className="fixed bottom-16 py-6 px-8 mx-6 bg-neutral-900/90 backdrop-blur" >
-          <ExportOptions targetRef={editorRef}/>
+        <Card className="fixed bottom-16 py-6 px-8 mx-6 bg-neutral-900/90 backdrop-blur">
+          <CardContent className="flex flex-wrap gap-6 p-0">
+            <ThemeSelect />
+            <LanguageSelect />
+            <FontSelect />
+            <ExportOptions targetRef={editorRef} />
+          </CardContent>
         </Card>
       </main>
     </>
