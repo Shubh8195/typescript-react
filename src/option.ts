@@ -2,7 +2,7 @@ export interface Languages {
     [key: string]: string;
 }
 
-export const languages: Languages = {
+export const languages = {
     bash: "Bash",
     c: "C",
     "c++": "C++",
