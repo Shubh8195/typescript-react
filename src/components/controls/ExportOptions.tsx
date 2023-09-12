@@ -21,7 +21,6 @@ type saveImage = (name: string, format: string) => any;
 
 const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
   const store = useStore();
-  console.log(store.title);
   const copyImage = async () => {
     if (targetRef && targetRef.current) {
       const imgBlob = await toBlob(targetRef.current, {
@@ -91,7 +90,6 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
           <ImageIcon />
           Copy Image
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="gap-2"
           onClick={() => {
@@ -115,7 +113,6 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
           <DownloadIcon />
           Save as PNG
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="gap-2"
           onClick={() =>

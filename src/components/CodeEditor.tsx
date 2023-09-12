@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
-import flourite from "flourite"
+import flourite from "flourite";
 import { codeSnippets, fonts } from "@/option";
 import Editor from "react-simple-code-editor";
 import hljs from "highlight.js";
@@ -9,17 +9,20 @@ const CodeEditor = () => {
   const store = useStore();
 
   useEffect(() => {
-    const randomSnippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];    
-    useStore.setState({code: randomSnippet.code})
-  },[])
+    const randomSnippet =
+      codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+    useStore.setState({ code: randomSnippet.code });
+  }, []);
 
   useEffect(() => {
-    if(store.autoDetectLanguage){
-      const {language} = flourite(store.code, {noUnknown: true});
-      useStore.setState({language: language.toLowerCase() || "plaintext"})
+    if (store.autoDetectLanguage) {
+      const { language } = flourite(store.code, { noUnknown: true });
+      console.log(language);
+
+      useStore.setState({ language: language.toLowerCase() || "plaintext" });
     }
-  },[store.autoDetectLanguage, store.code])
-  
+  }, [store.autoDetectLanguage, store.code]);
+
   return (
     <div
       className={cn(
@@ -43,8 +46,8 @@ const CodeEditor = () => {
             spellCheck={false}
             onClick={(e) => {
               // e.persist();
-              const target = e.target as HTMLInputElement; 
-              target.select(); 
+              const target = e.target as HTMLInputElement;
+              target.select();
             }}
             className="bg-transparent text-center text-gray-400 text-sm font-medium focus:outline-none"
           />
@@ -60,9 +63,10 @@ const CodeEditor = () => {
       >
         <Editor
           value={store.code}
-          onValueChange={(code) => useStore.setState({ code})}
+          onValueChange={(code) => useStore.setState({ code })}
           highlight={(code) =>
-            hljs.highlight(code, { language: store.language || "plaintext" }).value
+            hljs.highlight(code, { language: store.language || "plaintext" })
+              .value
           }
           style={{
             fontFamily: fonts[store.fontStyle].name,
@@ -71,7 +75,7 @@ const CodeEditor = () => {
           textareaClassName="focus:outline-none"
           onClick={(e) => {
             // e.persist();
-            const target = e.target as HTMLTextAreaElement; 
+            const target = e.target as HTMLTextAreaElement;
             target.select();
           }}
         />

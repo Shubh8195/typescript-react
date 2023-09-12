@@ -1,14 +1,21 @@
-import { useEffect, useRef } from "react";
 import "./App.css";
-import CodeEditor from "@/components/CodeEditor";
-import { cn } from "./lib/utils";
-import { fonts, themes } from "./option";
+import { useEffect, useRef } from "react";
 import useStore from "./store/Store";
+
+import { cn } from "./lib/utils";
+import CodeEditor from "@/components/CodeEditor";
 import { Card, CardContent } from "@/components/ui/card";
+import { Resizable } from "re-resizable";
+
 import ExportOptions from "@/components/controls/ExportOptions";
 import ThemeSelect from "./components/controls/ThemeSelect";
 import LanguageSelect from "./components/controls/LanguageSelect";
 import FontSelect from "./components/controls/FontSelect";
+import FontSizeSelect from "./components/controls/FontSizeSelect";
+import PaddingSlider from "./components/controls/PaddingSlider";
+import BackgroundSwitch from "./components/controls/BackgroundSwitch";
+import DarkMode from "./components/controls/DarkMode";
+import { fonts, themes } from "./option";
 
 function App() {
   const editorRef = useRef(null);
@@ -48,22 +55,36 @@ function App() {
           href={fonts[fontStyle].src}
           crossOrigin="anonymous"
         />
-        <div
-          className={cn(
-            "overflow-hidden mb-2 transition-all ease-out",
-            showBackground ? themes[theme].background : "ring ring-neutral-900"
-          )}
-          style={{ padding }}
-          ref={editorRef}
+        <Resizable
+          enable={{ left: true, right: true }}
+          minWidth={padding * 2 + 400}
         >
-          <CodeEditor />
-        </div>
+          <div
+            className={cn(
+              "overflow-hidden mb-2 transition-all ease-out",
+              showBackground
+                ? themes[theme].background
+                : "ring ring-neutral-900"
+            )}
+            style={{ padding }}
+            ref={editorRef}
+          >
+            <CodeEditor />
+          </div>
+        </Resizable>
         <Card className="fixed bottom-16 py-6 px-8 mx-6 bg-neutral-900/90 backdrop-blur">
           <CardContent className="flex flex-wrap gap-6 p-0">
             <ThemeSelect />
             <LanguageSelect />
             <FontSelect />
-            <ExportOptions targetRef={editorRef} />
+            <FontSizeSelect />
+            <PaddingSlider />
+            <BackgroundSwitch />
+            <DarkMode />
+            <div className="w-px bg-neutral-800 " />
+            <div className="place-self-center">
+              <ExportOptions targetRef={editorRef} />
+            </div>
           </CardContent>
         </Card>
       </main>
