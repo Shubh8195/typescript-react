@@ -21,8 +21,8 @@ import { Undo2 } from "lucide-react";
 function App() {
   const editorRef = useRef(null);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [defaultWidth, setDefaultWidth] = useState();
-  const [width, setWidth] = useState<number>();
+  const [defaultWidth, setDefaultWidth] = useState<number | string>("");
+  const [width, setWidth] = useState<number | string>("");
   const [isResizing, setIsResizing] = useState<boolean | null>(null);
 
   const theme = useStore((state) => state.theme);
@@ -41,7 +41,7 @@ function App() {
   }, [dataLoaded]);
 
   useEffect(() => {
-    const element = editorRef.current;
+    const element = document.getElementById("code-container");
 
     if (dataLoaded && element) {
       const elementWidth = element.clientWidth;
