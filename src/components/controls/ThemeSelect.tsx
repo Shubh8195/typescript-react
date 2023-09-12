@@ -20,10 +20,10 @@ const ThemeSelect = () => {
         value={theme}
         onValueChange={(theme) => useStore.setState({ theme })}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-40">
           <SelectValue placeholder="Select Theme" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="dark max-h-[500px]">
           {Object.entries(themes).map(([name, theme]: [string, any]) => (
             <SelectItem key={name} value={name}>
               <div className="flex gap-2 items-center justify-between">

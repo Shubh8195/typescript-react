@@ -6,7 +6,7 @@ export const languages = {
     bash: "Bash",
     c: "C",
     "c++": "C++",
-    csharp: "C#",
+    "c#": "C#",
     clojure: "Clojure",
     crystal: "Crystal",
     css: "CSS",

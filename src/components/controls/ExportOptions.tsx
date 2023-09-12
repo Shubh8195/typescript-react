@@ -10,7 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { DownloadIcon, ImageIcon, Link2Icon, Share } from "lucide-react";
+import {
+  ArrowBigUp,
+  Command,
+  DownloadIcon,
+  ImageIcon,
+  Link2Icon,
+  Share,
+} from "lucide-react";
 import useStore from "@/store/Store";
 
 interface ExportOptionsProps {
@@ -21,7 +28,6 @@ type saveImage = (name: string, format: string) => any;
 
 const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
   const store = useStore();
-  console.log(store.title);
   const copyImage = async () => {
     if (targetRef && targetRef.current) {
       const imgBlob = await toBlob(targetRef.current, {
@@ -69,6 +75,32 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
       a.click();
     }
   };
+
+  function handleCopyShortcut(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key === "c") {
+      copyImage();
+    } else if (event.ctrlKey && event.shiftKey && event.key === "C") {
+      copyLink();
+    }
+  }
+  
+  document.addEventListener("keydown", handleCopyShortcut);
+
+  // function handleSaveShortcut(event: KeyboardEvent) {
+  //   if (event.ctrlKey && event.key === "s") {
+  //     event.preventDefault();
+  //     // saveImage(store.title, "PNG");
+  //     console.log("hello");
+  //     event.stopPropagation();
+  //   }
+  //   //  else if (event.ctrlKey && event.shiftKey && event.key === "S") {
+  //   //   event.stopPropagation(); // Stop the event from propagating further
+  //   //   saveImage(store.title, "SVG");
+  //   // }
+  // }
+
+  // document.addEventListener("keydown", handleSaveShortcut);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -88,18 +120,32 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
             })
           }
         >
-          <ImageIcon />
-          Copy Image
+          <div className="w-full flex items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <ImageIcon className="h-4 w-4" />
+              Copy Image
+            </div>
+            <div className="flex items-center flex-en gap-1">
+              <Command className="h-4 w-4" />C
+            </div>
+          </div>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="gap-2"
           onClick={() => {
             copyLink(), toast.success("Link copied to clipboard");
           }}
         >
-          <Link2Icon />
-          Copy Link
+          <div className="w-full flex items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <Link2Icon className="h-4 w-4" />
+              Copy Link
+            </div>
+            <div className="flex items-center gap-1">
+              <ArrowBigUp className="h-4 w-4" />
+              <Command className="h-4 w-4 border-1" />C
+            </div>
+          </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -112,10 +158,16 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
             })
           }
         >
-          <DownloadIcon />
-          Save as PNG
+          <div className="w-full flex items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <DownloadIcon className="h-4 w-4" />
+              Save as PNG
+            </div>
+            <div className="flex items-center flex-en gap-1">
+              <Command className="h-4 w-4" />A
+            </div>
+          </div>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="gap-2"
           onClick={() =>
@@ -126,8 +178,16 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
             })
           }
         >
-          <DownloadIcon />
-          Save as SVG
+          <div className="w-full flex items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <DownloadIcon className="h-4 w-4" />
+              Save as SVG
+            </div>
+            <div className="flex items-center gap-1">
+              <ArrowBigUp className="h-4 w-4" />
+              <Command className="h-4 w-4 border-1" />A
+            </div>
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
