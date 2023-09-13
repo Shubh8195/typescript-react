@@ -1,4 +1,4 @@
-import type { MutableRefObject } from "react";
+import { useEffect, type MutableRefObject } from "react";
 import { toast } from "react-hot-toast";
 import { toBlob, toPng } from "html-to-image";
 
@@ -12,7 +12,6 @@ import {
 } from "../ui/dropdown-menu";
 import {
   ArrowBigUp,
-  Command,
   DownloadIcon,
   ImageIcon,
   Link2Icon,
@@ -40,13 +39,11 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
       }
     }
   };
-  // Create an array of key-value pairs from the object
 
   const copyLink = () => {
     const state = useStore.getState();
     const queryParamsArray = Object.entries(state).map(([key, value]) => {
       // Encode the values as needed (e.g., using encodeURIComponent)
-      console.log(key);
       if (key === "code") {
         value = btoa(state.code); // Encode the 'code' property with btoa
       }
@@ -84,32 +81,41 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
     }
   };
 
-  function handleCopyShortcut(event: KeyboardEvent) {
-    if (event.ctrlKey && event.key === "c") {
-      copyImage();
-      console.log("hello")
-    } else if (event.ctrlKey && event.shiftKey && event.key === "C") {
-      copyLink();
+  useEffect(() => {
+    function handleCopyShortcut(event: KeyboardEvent) {
+      if (event.ctrlKey && event.key === "c") {
+        event.preventDefault();
+        copyImage();
+      } else if (event.ctrlKey && event.shiftKey && event.key === "C") {
+        event.preventDefault();
+        copyLink();
+      }
     }
-  }
 
-  document.addEventListener("keydown", handleCopyShortcut);
+    document.addEventListener("keydown", handleCopyShortcut);
 
-  // function handleSaveShortcut(event: KeyboardEvent) {
-  //   if (event.ctrlKey && event.key === "s") {
-  //     event.preventDefault();
-  //     // saveImage(store.title, "PNG");
-  //     console.log("hello");
-  //     event.stopPropagation();
-  //   }
-  //   //  else if (event.ctrlKey && event.shiftKey && event.key === "S") {
-  //   //   event.stopPropagation(); // Stop the event from propagating further
-  //   //   saveImage(store.title, "SVG");
-  //   // }
-  // }
+    // Cleanup: Remove the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleCopyShortcut);
+    };
+  }, []);
 
-  // document.addEventListener("keydown", handleSaveShortcut);
+  useEffect(() => {
+    function handleSaveShortcut(event: KeyboardEvent) {
+      if (event.ctrlKey && event.key === "s") {
+        event.preventDefault();
+        saveImage(store.title, "PNG");
+      } else if (event.ctrlKey && event.shiftKey && event.key === "S") {
+        event.preventDefault();
+        saveImage(store.title, "SVG");
+      }
+    }
+    document.addEventListener("keydown", handleSaveShortcut);
 
+    return () => {
+      document.removeEventListener("keydown", handleSaveShortcut);
+    };
+  }, []);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -135,7 +141,7 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
               Copy Image
             </div>
             <div className="flex items-center flex-en gap-1">
-              <Command className="h-4 w-4" />C
+              <code>Ctrl</code>+ C
             </div>
           </div>
         </DropdownMenuItem>
@@ -152,7 +158,8 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
             </div>
             <div className="flex items-center gap-1">
               <ArrowBigUp className="h-4 w-4" />
-              <Command className="h-4 w-4 border-1" />C
+              +
+              <code>Ctrl</code>+ C
             </div>
           </div>
         </DropdownMenuItem>
@@ -173,7 +180,7 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
               Save as PNG
             </div>
             <div className="flex items-center flex-en gap-1">
-              <Command className="h-4 w-4" />A
+              <code>Ctrl</code>+ A
             </div>
           </div>
         </DropdownMenuItem>
@@ -194,7 +201,8 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
             </div>
             <div className="flex items-center gap-1">
               <ArrowBigUp className="h-4 w-4" />
-              <Command className="h-4 w-4 border-1" />A
+              +
+              <code>Ctrl</code>+ A
             </div>
           </div>
         </DropdownMenuItem>
