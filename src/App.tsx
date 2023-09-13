@@ -126,7 +126,7 @@ function App() {
             <span className="text-xs font-medium">Reset width</span>
           </div>
         )}
-        <Card className="bottom-16 py-6 px-8 mx-6 bg-neutral-900/90 backdrop-blur">
+        <Card className="bottom-16 py-6 px-8 mx-6 my-8 bg-neutral-900/90 backdrop-blur">
           <CardContent className="flex flex-wrap gap-6 p-0">
             <ThemeSelect />
             <LanguageSelect />
