@@ -40,14 +40,22 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
       }
     }
   };
+  // Create an array of key-value pairs from the object
 
   const copyLink = () => {
     const state = useStore.getState();
+    const queryParamsArray = Object.entries(state).map(([key, value]) => {
+      // Encode the values as needed (e.g., using encodeURIComponent)
+      console.log(key);
+      if (key === "code") {
+        value = btoa(state.code); // Encode the 'code' property with btoa
+      }
+      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+    });
 
-    const queryParams = new URLSearchParams({
-      ...state,
-      code: btoa(state.code),
-    }).toString();
+    const queryString = queryParamsArray.join("&");
+
+    const queryParams = new URLSearchParams(queryString);
 
     navigator.clipboard.writeText(`${location.href}?${queryParams}`);
   };
@@ -79,11 +87,12 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ targetRef }) => {
   function handleCopyShortcut(event: KeyboardEvent) {
     if (event.ctrlKey && event.key === "c") {
       copyImage();
+      console.log("hello")
     } else if (event.ctrlKey && event.shiftKey && event.key === "C") {
       copyLink();
     }
   }
-  
+
   document.addEventListener("keydown", handleCopyShortcut);
 
   // function handleSaveShortcut(event: KeyboardEvent) {
