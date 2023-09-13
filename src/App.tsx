@@ -80,7 +80,7 @@ function App() {
         <Resizable
           enable={{ left: true, right: true }}
           minWidth={padding * 2 + 400}
-          size={{ width: width }}
+          size={{ width: width, height: "100%" }}
           onResize={(_, __, elementRef) => {
             setWidth(elementRef.clientWidth);
             setIsResizing(true);
