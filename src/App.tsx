@@ -20,7 +20,7 @@ import { Undo2 } from "lucide-react";
 
 function App() {
   const editorRef = useRef(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState<boolean>(false);
   const [defaultWidth, setDefaultWidth] = useState<number | string>("");
   const [width, setWidth] = useState<number | string>("");
   const [isResizing, setIsResizing] = useState<boolean | null>(null);
@@ -85,11 +85,11 @@ function App() {
           enable={{ left: true, right: true }}
           minWidth={padding * 2 + 400}
           size={{ width: width }}
-          onResize={(e, direction, ref) => {
-            setWidth(ref.clientWidth);
+          onResize={(_, __, elementRef) => {
+            setWidth(elementRef.clientWidth);
             setIsResizing(true);
           }}
-          onResizeStop={(e) => {
+          onResizeStop={() => {
             setIsResizing(false);
           }}
         >
