@@ -10,7 +10,7 @@ const DarkMode = () => {
         Dark Mode
       </label>
       <Switch
-        checked={darkMode}
+        checked={ darkMode }
         onCheckedChange={(checked) =>
           useStore.setState({ darkMode: checked })
         }
